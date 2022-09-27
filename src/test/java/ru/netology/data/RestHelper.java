@@ -11,10 +11,10 @@ import static io.restassured.RestAssured.given;
 @UtilityClass
 public class RestHelper {
 
-    public String pathBuyPage = "/api/v1/payment";
+    public String pathBuyPage = "/api/v1/pay";
     public String pathCreditPage = "/api/v1/credit";
 
-    private static RequestSpecification requestSpec = new RequestSpecBuilder()
+    private RequestSpecification requestSpec = new RequestSpecBuilder()
             .setBaseUri("http://localhost")
             .setPort(8080)
             .setAccept(ContentType.JSON)

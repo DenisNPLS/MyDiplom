@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class CreditData {
     String id;
-    String bankId;
+    String bank_id;
     String created;
     String status;
 }

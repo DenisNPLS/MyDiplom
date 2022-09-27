@@ -8,5 +8,5 @@ public class BuyData {
     String amount;
     String created;
     String status;
-    String transferOperation;
+    String transaction_id;
 }

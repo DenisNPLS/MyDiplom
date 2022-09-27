@@ -9,6 +9,11 @@ services:
       - MYSQL_DATABASE=app
       - MYSQL_USER=app
       - MYSQL_PASSWORD=pass
+  node:
+    build: gate-simulator
+    image: gate-simulator:1.0
+    ports:
+     - '9999:9999'
   postgres:
     image: postgres:12-alpine
     ports:
@@ -19,11 +24,3 @@ services:
       - POSTGRES_PASSWORD=Qwerty2wer45
       - POSTGRES_DB=app
       - POSTGRES_USER=admin
-  node:
-    build: gate-simulator
-    image: gate-simulator:1.0
-    ports:
-     - '9999:9999'
-    expose:
-      - "9999"
-    command: "npm start"

@@ -246,9 +246,9 @@ public class DataGenerator {
     @SneakyThrows
     public static String getIdOperationBuyToCard() {
         val runner = new QueryRunner();
-        val getId = "SELECT payment_id FROM order_entity ORDER BY created DESC LIMIT 1";
+        val getId = "SELECT payment_id FROM buy_info ORDER BY created DESC LIMIT 1";
         try (Connection connection = getConnection()) {
-            val paymentId = runner.query(connection, getId, new ScalarHandler<>());
+            val paymentId = runner.query(connection, getId, new ScalarHandler<>(String.valueOf(BuyInfo.class)));
             return paymentId.toString();
         }
     }
@@ -256,7 +256,7 @@ public class DataGenerator {
     @SneakyThrows
     public static BuyData getStatusOperationBuyToCard() {
         var runner = new QueryRunner();
-        var getStatus = "SELECT status, transferOperation FROM order_entity ORDER BY created DESC LIMIT 1";
+        var getStatus = "SELECT status, transaction_id FROM buy_data ORDER BY created DESC LIMIT 1";
         try (Connection connection = getConnection()) {
             val transactionId = runner.query(connection, getStatus, new BeanHandler<>(BuyData.class));
             return transactionId;
@@ -266,7 +266,7 @@ public class DataGenerator {
     @SneakyThrows
     public static String getIdOperationBuyInCredit() {
         var runner = new QueryRunner();
-        var getId = "SELECT credit_id FROM order_entity ORDER BY created DESC LIMIT 1";
+        var getId = "SELECT credit_id FROM buy_info ORDER BY created DESC LIMIT 1";
         try (Connection connection = getConnection()) {
             return runner.query(connection, getId, new ScalarHandler<>());
         }
@@ -275,7 +275,7 @@ public class DataGenerator {
     @SneakyThrows
     public static CreditData getStatusOperationBuyInCredit() {
         var runner = new QueryRunner();
-        var getStatus = "SELECT status, bank_id transferOperation FROM credit_data ORDER BY created DESC LIMIT 1";
+        var getStatus = "SELECT status, bank_id FROM credit_data ORDER BY created DESC LIMIT 1";
         try (Connection connection = getConnection()) {
             val bank_id = runner.query(connection, getStatus, new BeanHandler<>(CreditData.class));
             return bank_id;
@@ -285,9 +285,9 @@ public class DataGenerator {
     @SneakyThrows
     public static void cleanData() {
         val runner = new QueryRunner();
-        val order = "DELETE FROM app.order_entity";
-        val payment = "DELETE FROM app.payment_entity";
-        val creditRequest = "DELETE FROM app.credit_request_entity";
+        val order = "DELETE FROM app.buy_info";
+        val payment = "DELETE FROM app.buy_data";
+        val creditRequest = "DELETE FROM app.credit_data";
         try (val connection = getConnection()) {
             runner.update(connection, order);
             runner.update(connection, payment);
