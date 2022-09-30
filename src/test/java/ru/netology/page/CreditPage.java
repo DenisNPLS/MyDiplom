@@ -29,10 +29,10 @@ public class CreditPage {
     private SelenideElement messageDeclined = $x("//div[contains(text(),'Ошибка! Банк отказал в проведении операции')]");
 
     public void fillFormCredit(DataGenerator.OwnerInfo ownerInfo) {
-        numberCard.setValue(ownerInfo.getCardNumber());
+        numberCard.setValue(ownerInfo.getNumber());
         month.setValue(ownerInfo.getMonth());
         year.setValue(ownerInfo.getYear());
-        owner.setValue(ownerInfo.getName());
+        owner.setValue(ownerInfo.getHolder());
         cvc.setValue(ownerInfo.getCvc());
     }
 

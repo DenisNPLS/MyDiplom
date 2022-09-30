@@ -60,10 +60,10 @@ public class DataGenerator {
 
     @Value
     public static class OwnerInfo {
-        String cardNumber;
+        String number;
         String month;
         String year;
-        String name;
+        String holder;
         String cvc;
     }
 
@@ -236,7 +236,9 @@ public class DataGenerator {
 
     public static Connection getConnection() {
         try {
-            connection = DriverManager.getConnection(url, user, password);
+            connection = DriverManager.getConnection(
+                    "jdbc:mysql//localhost:3306/app", "app", "pass"
+            );
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
@@ -244,22 +246,21 @@ public class DataGenerator {
     }
 
     @SneakyThrows
-    public static String getIdOperationBuyToCard() {
-        val runner = new QueryRunner();
-        val getId = "SELECT payment_id FROM buy_info ORDER BY created DESC LIMIT 1";
+    public static PaymentEntity getStatusOperationBuyToCard() {
+        var runner = new QueryRunner();
+        var getStatus = "SELECT status, transaction_id  FROM payment_entity ORDER BY created DESC LIMIT 1";
         try (Connection connection = getConnection()) {
-            val paymentId = runner.query(connection, getId, new ScalarHandler<>(String.valueOf(BuyInfo.class)));
-            return paymentId.toString();
+            val transactionId = runner.query(connection, getStatus, new BeanHandler<>(PaymentEntity.class));
+            return transactionId;
         }
     }
 
     @SneakyThrows
-    public static BuyData getStatusOperationBuyToCard() {
-        var runner = new QueryRunner();
-        var getStatus = "SELECT status, transaction_id FROM buy_data ORDER BY created DESC LIMIT 1";
+    public static String getIdOperationBuyToCard() {
+        val runner = new QueryRunner();
+        val getId = "SELECT payment_id FROM order_entity ORDER BY created DESC LIMIT 1";
         try (Connection connection = getConnection()) {
-            val transactionId = runner.query(connection, getStatus, new BeanHandler<>(BuyData.class));
-            return transactionId;
+            return runner.query(connection, getId, new ScalarHandler<>());
         }
     }
 
@@ -273,11 +274,11 @@ public class DataGenerator {
     }
 
     @SneakyThrows
-    public static CreditData getStatusOperationBuyInCredit() {
+    public static CreditEntity getStatusOperationBuyInCredit() {
         var runner = new QueryRunner();
-        var getStatus = "SELECT status, bank_id FROM credit_data ORDER BY created DESC LIMIT 1";
+        var getStatus = "SELECT status, bank_id  FROM credit_entity ORDER BY created DESC LIMIT 1";
         try (Connection connection = getConnection()) {
-            val bank_id = runner.query(connection, getStatus, new BeanHandler<>(CreditData.class));
+            val bank_id = runner.query(connection, getStatus, new BeanHandler<>(CreditEntity.class));
             return bank_id;
         }
     }
@@ -285,9 +286,9 @@ public class DataGenerator {
     @SneakyThrows
     public static void cleanData() {
         val runner = new QueryRunner();
-        val order = "DELETE FROM app.buy_info";
-        val payment = "DELETE FROM app.buy_data";
-        val creditRequest = "DELETE FROM app.credit_data";
+        val order = "DELETE FROM order_entity";
+        val payment = "DELETE FROM payment_entity";
+        val creditRequest = "DELETE FROM credit_entity";
         try (val connection = getConnection()) {
             runner.update(connection, order);
             runner.update(connection, payment);

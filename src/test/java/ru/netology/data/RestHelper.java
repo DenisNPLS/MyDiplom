@@ -22,10 +22,10 @@ public class RestHelper {
             .log(LogDetail.ALL)
             .build();
 
-    public static String sendFormBuy(DataGenerator.OwnerInfo ownerInfo) {
+    public static String sendFormBuy(DataGenerator.OwnerInfo cards) {
         return given()
                 .spec(requestSpec)
-                .body(ownerInfo)
+                .body(cards)
                 .when()
                 .post(pathBuyPage)
                 .then()
@@ -33,10 +33,10 @@ public class RestHelper {
                 .extract().response().asString();
     }
 
-    public static String sendFormCredit(DataGenerator.OwnerInfo ownerInfo) {
+    public static String sendFormCredit(DataGenerator.OwnerInfo cards) {
         return given()
                 .spec(requestSpec)
-                .body(ownerInfo)
+                .body(cards)
                 .when()
                 .post(pathCreditPage)
                 .then()

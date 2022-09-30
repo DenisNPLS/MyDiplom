@@ -1,27 +1,33 @@
 package ru.netology.page;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
+import org.yaml.snakeyaml.events.CollectionStartEvent;
 import ru.netology.data.DataGenerator;
 
 import java.time.Duration;
+import java.util.Collections;
 
-import static com.codeborne.selenide.Selenide.$x;
+import static com.codeborne.selenide.Selenide.*;
 
 public class BuyPage {
 
     public BuyPage() {
+        buttons.get(0).click();
         SelenideElement buyPage = $x("//h3[contains(text(),'Оплата по карте')]");
         buyPage.shouldBe(Condition.visible);
     }
 
-    private SelenideElement numberCard = $x("//span[contains(text(),'Номер карты')]");
-    private SelenideElement month = $x("//span[contains(text(),'Месяц')]");
-    private SelenideElement year = $x("//span[contains(text(),'Год')]");
-    private SelenideElement owner = $x("//span[contains(text(),'Владелец')]");
-    private SelenideElement cvc = $x("//span[contains(text(),'CVC/CVV')]");
-    private SelenideElement button = $x("//button[@type='button']").find(By.linkText("Продолжить"));
+    private SelenideElement numberCard = $("input[placeholder='0000 0000 0000 0000']");
+    private SelenideElement month = $("input[placeholder='08']");
+    private SelenideElement year = $("input[placeholder='22']");
+    private ElementsCollection owner = $$("input[class='input__control']");
+    private ElementsCollection cvc = $$("input[class='input__control']");
+    //private SelenideElement button = $x("//button[@type='button']").find(By.linkText("Продолжить"));
+
+    private ElementsCollection buttons = $$("button[role='button']");
 
     private SelenideElement messageSuccess = $x("//div[contains(text(),'Успешно')]");
     private SelenideElement messageApproved = $x("//div[contains(text(),'Операция одобрена Банком')]");
@@ -40,12 +46,12 @@ public class BuyPage {
     }
 
     public void approvedMessage() {
-        messageSuccess.shouldBe(Condition.visible, Duration.ofSeconds(10));
-        messageApproved.shouldBe(Condition.visible, Duration.ofSeconds(10));
+        messageSuccess.shouldBe(Condition.visible, Duration.ofSeconds(15));
+        messageApproved.shouldBe(Condition.visible, Duration.ofSeconds(15));
     }
 
     public void sendForm() {
-        button.click();
+        buttons.get(2).click();
     }
 
     public void emptyFieldNumberCard() {
@@ -105,11 +111,11 @@ public class BuyPage {
     }
 
     public void fillFormBuy(DataGenerator.OwnerInfo ownerInfo) {
-        numberCard.setValue(ownerInfo.getCardNumber());
+        numberCard.sendKeys(ownerInfo.getNumber());
         month.setValue(ownerInfo.getMonth());
         year.setValue(ownerInfo.getYear());
-        owner.setValue(ownerInfo.getName());
-        cvc.setValue(ownerInfo.getCvc());
+        owner.get(3).val(ownerInfo.getHolder());
+        cvc.get(4).val(ownerInfo.getCvc());
     }
 
 }

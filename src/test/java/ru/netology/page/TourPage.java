@@ -1,19 +1,26 @@
 package ru.netology.page;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.Selenide.$$x;
 import static com.codeborne.selenide.Selenide.$x;
 
 public class TourPage {
 
-    private SelenideElement buttonBuy = $x("//*[@class='button button_size_m button_theme_alfa-on-white']");
+    private SelenideElement buttonBuy = $x("//button[@type='button']").find(By.linkText("Купить"));
     private SelenideElement buttonCredit = $x("//*[contains(text(),'Купить в кредит')]");
-    private SelenideElement pageCredit = $x("//*[contains(text(), 'Кредит по данным карты')]");
+    private SelenideElement mainPage = $x("//h2[text()='Путешествие дня']");
 
     public BuyPage toBuy() {
         buttonBuy.click();
         return new BuyPage();
+    }
+
+    public TourPage() {
+        mainPage.shouldBe(Condition.visible);
     }
 
     public CreditPage toCredit() {
@@ -21,7 +28,4 @@ public class TourPage {
         return new CreditPage();
     }
 
-    public void pageCreditVisible() {
-        pageCredit.shouldBe(Condition.visible);
-    }
 }
