@@ -1,6 +1,7 @@
 package ru.netology.data;
 
 import com.github.javafaker.Faker;
+import com.mysql.jdbc.Driver;
 import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.val;
@@ -8,18 +9,18 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.Executor;
+
+import static java.sql.DriverManager.getConnection;
 
 public class DataGenerator {
 
-    private static final String url = System.getProperty("db.url");
-    private static final String user = System.getProperty("db.user");
-    private static final String password = System.getProperty("db.password");
     private static Connection connection;
 
     public static Faker faker = new Faker(new Locale("en"));
@@ -131,6 +132,11 @@ public class DataGenerator {
         return new OwnerInfo(generateCardNumber(), month, generateYear(), generateOwner(), generateCvc());
     }
 
+    public static OwnerInfo getExpiredMonth() {
+        var month = LocalDate.now().minusMonths(1).format(DateTimeFormatter.ofPattern("MM"));
+        return new OwnerInfo(generateCardNumber(), month, generateYear(), generateOwner(), generateCvc());
+    }
+
     public static OwnerInfo getEarlyYear() {
         var earlyYear = LocalDate.now().minusYears(2).format(DateTimeFormatter.ofPattern("yy"));
         return new OwnerInfo(generateCardNumber(), generateMonth(), earlyYear, generateOwner(), generateCvc());
@@ -236,11 +242,17 @@ public class DataGenerator {
 
     public static Connection getConnection() {
         try {
+            Class.forName("com.mysql.jdbc.Driver");
+        }
+        catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
             connection = DriverManager.getConnection(
                     "jdbc:mysql//localhost:3306/app", "app", "pass"
             );
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return connection;
     }
@@ -267,18 +279,18 @@ public class DataGenerator {
     @SneakyThrows
     public static String getIdOperationBuyInCredit() {
         var runner = new QueryRunner();
-        var getId = "SELECT credit_id FROM buy_info ORDER BY created DESC LIMIT 1";
+        var getId = "SELECT credit_id FROM payment_entity ORDER BY created DESC LIMIT 1";
         try (Connection connection = getConnection()) {
             return runner.query(connection, getId, new ScalarHandler<>());
         }
     }
 
     @SneakyThrows
-    public static CreditEntity getStatusOperationBuyInCredit() {
+    public static CreditRequestEntity getStatusOperationBuyInCredit() {
         var runner = new QueryRunner();
-        var getStatus = "SELECT status, bank_id  FROM credit_entity ORDER BY created DESC LIMIT 1";
+        var getStatus = "SELECT status, bank_id  FROM credit_request_entity ORDER BY created DESC LIMIT 1";
         try (Connection connection = getConnection()) {
-            val bank_id = runner.query(connection, getStatus, new BeanHandler<>(CreditEntity.class));
+            val bank_id = runner.query(connection, getStatus, new BeanHandler<>(CreditRequestEntity.class));
             return bank_id;
         }
     }
@@ -288,7 +300,7 @@ public class DataGenerator {
         val runner = new QueryRunner();
         val order = "DELETE FROM order_entity";
         val payment = "DELETE FROM payment_entity";
-        val creditRequest = "DELETE FROM credit_entity";
+        val creditRequest = "DELETE FROM credit_request_entity";
         try (val connection = getConnection()) {
             runner.update(connection, order);
             runner.update(connection, payment);

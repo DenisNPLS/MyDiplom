@@ -14,18 +14,11 @@ import static com.codeborne.selenide.Selenide.*;
 
 public class BuyPage {
 
-    public BuyPage() {
-        buttons.get(0).click();
-        SelenideElement buyPage = $x("//h3[contains(text(),'Оплата по карте')]");
-        buyPage.shouldBe(Condition.visible);
-    }
-
     private SelenideElement numberCard = $("input[placeholder='0000 0000 0000 0000']");
     private SelenideElement month = $("input[placeholder='08']");
     private SelenideElement year = $("input[placeholder='22']");
     private ElementsCollection owner = $$("input[class='input__control']");
     private ElementsCollection cvc = $$("input[class='input__control']");
-    //private SelenideElement button = $x("//button[@type='button']").find(By.linkText("Продолжить"));
 
     private ElementsCollection buttons = $$("button[role='button']");
 
@@ -41,8 +34,8 @@ public class BuyPage {
     private SelenideElement cvcError = $x("//span[contains(text(),'CVC/CVV')]").parent().$(".input__sub");
 
     public void declinedMessage() {
-        messageFailure.shouldBe(Condition.visible, Duration.ofSeconds(10));
-        messageDeclined.shouldBe(Condition.visible, Duration.ofSeconds(10));
+        messageFailure.shouldBe(Condition.visible, Duration.ofSeconds(15));
+        messageDeclined.shouldBe(Condition.visible, Duration.ofSeconds(15));
     }
 
     public void approvedMessage() {
@@ -66,7 +59,7 @@ public class BuyPage {
         monthError.shouldHave(Condition.exactText("Поле обязательно для заполнения"));
     }
 
-    public void wrongFormatFieldNumberMonth() {
+    public void wrongFormatFieldMonth() {
         monthError.shouldHave(Condition.exactText("Неверный формат"));
     }
 
@@ -82,7 +75,7 @@ public class BuyPage {
         yearError.shouldHave(Condition.exactText("Поле обязательно для заполнения"));
     }
 
-    public void wrongFormatFieldNumberYear() {
+    public void wrongFormatFieldYear() {
         yearError.shouldHave(Condition.exactText("Неверный формат"));
     }
 
@@ -98,7 +91,7 @@ public class BuyPage {
         ownerError.shouldHave(Condition.exactText("Поле обязательно для заполнения"));
     }
 
-    public void wrongFormatFieldNumberOwner() {
+    public void wrongFormatFieldOwner() {
         ownerError.shouldHave(Condition.exactText("Неверный формат"));
     }
 
@@ -106,7 +99,7 @@ public class BuyPage {
         cvcError.shouldHave(Condition.exactText("Поле обязательно для заполнения"));
     }
 
-    public void wrongFormatFieldNumberCvc() {
+    public void wrongFormatFieldCvc() {
        cvcError.shouldHave(Condition.exactText("Неверный формат"));
     }
 
