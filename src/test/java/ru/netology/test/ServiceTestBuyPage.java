@@ -33,6 +33,7 @@ public class ServiceTestBuyPage {
 
     @AfterAll
     static void tearDownAll() {
+        DataGenerator.cleanData();
         SelenideLogger.removeListener("allure");
     }
 

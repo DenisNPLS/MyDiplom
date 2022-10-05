@@ -33,6 +33,7 @@ public class ServiceTestCreditPage {
 
     @AfterAll
     static void tearDownAll() {
+        DataGenerator.cleanData();
         SelenideLogger.removeListener("allure");
     }
 
