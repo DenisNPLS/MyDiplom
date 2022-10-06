@@ -2,8 +2,6 @@ package ru.netology.test;
 
 import lombok.val;
 import org.junit.jupiter.api.Test;
-import ru.netology.data.DataGenerator;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static ru.netology.data.DataGenerator.getApprovedCard;
 import static ru.netology.data.DataGenerator.getDeclinedCard;

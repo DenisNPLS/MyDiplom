@@ -10,11 +10,11 @@ import org.junit.jupiter.api.Test;
 import ru.netology.data.DataGenerator;
 import ru.netology.page.CreditPage;
 import ru.netology.page.TourPage;
-
 import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ServiceTestCreditPage {
+
     private TourPage tourPage = new TourPage();
     private CreditPage creditPage = new CreditPage();
 
@@ -23,7 +23,6 @@ public class ServiceTestCreditPage {
         open(System.getProperty("sut.url"));
         SelenideLogger.addListener("allure", new AllureSelenide());
     }
-
 
     @BeforeEach
     void setup() {

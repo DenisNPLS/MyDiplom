@@ -1,7 +1,7 @@
 package ru.netology.data;
 
 import com.github.javafaker.Faker;
-import com.mysql.jdbc.Driver;
+import com.mysql.cj.jdbc.Driver;
 import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.val;
@@ -9,19 +9,14 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-import java.util.concurrent.Executor;
-
-import static java.sql.DriverManager.getConnection;
 
 public class DataGenerator {
-
-    private static Connection connection;
 
     public static Faker faker = new Faker(new Locale("en"));
 
@@ -36,7 +31,7 @@ public class DataGenerator {
     }
 
     public static String generateYear() {
-        int year = faker.number().numberBetween(0, 6);
+        int year = faker.number().numberBetween(1, 6);
         String date = LocalDate.now().plusYears(year).format(DateTimeFormatter.ofPattern("yy"));
         return date;
     }
@@ -52,11 +47,6 @@ public class DataGenerator {
 
     public static String generateSymbol() {
         return String.valueOf(faker.random().nextInt(5));
-    }
-
-
-    public static OwnerInfo buyer(String locale) {
-        return new OwnerInfo(generateCardNumber(), generateMonth(), generateYear(), generateOwner(), generateCvc());
     }
 
     @Value
@@ -78,10 +68,6 @@ public class DataGenerator {
         var DeclinedCard = "4444 4444 4444 4442";
         return new OwnerInfo(DeclinedCard, generateMonth(), generateYear(), generateOwner(), generateCvc());
 
-    }
-
-    public static OwnerInfo getRandomCard() {
-        return new OwnerInfo(generateCardNumber(), generateMonth(), generateYear(), generateOwner(), generateCvc());
     }
 
     public static OwnerInfo getLatinaInFiledNumber() {
@@ -240,17 +226,24 @@ public class DataGenerator {
         return new OwnerInfo(card, month, year, owner, cvc);
     }
 
+    private static Connection connection;
+
     public static Connection getConnection() {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-        }
-        catch (ClassNotFoundException e) {
+            Driver driver = new com.mysql.cj.jdbc.Driver();
+            DriverManager.registerDriver(driver);
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            //Class.forName("com.postgresql.cj.jdbc.Driver"); Для использования драйвера postgresql
+        } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
         try {
             connection = DriverManager.getConnection(
-                    "jdbc:mysql//localhost:3306/app", "app", "pass"
-            );
+                    "jdbc:mysql://localhost:3306/app", "app", "pass"
+            ); // Соответственно используем этот "jdbc:postgresql://localhost:5432/app" url для использования postgresql БД
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -269,7 +262,7 @@ public class DataGenerator {
 
     @SneakyThrows
     public static String getIdOperationBuyToCard() {
-        val runner = new QueryRunner();
+        var runner = new QueryRunner();
         val getId = "SELECT payment_id FROM order_entity ORDER BY created DESC LIMIT 1";
         try (Connection connection = getConnection()) {
             return runner.query(connection, getId, new ScalarHandler<>());
@@ -279,7 +272,7 @@ public class DataGenerator {
     @SneakyThrows
     public static String getIdOperationBuyInCredit() {
         var runner = new QueryRunner();
-        var getId = "SELECT credit_id FROM payment_entity ORDER BY created DESC LIMIT 1";
+        var getId = "SELECT credit_id FROM order_entity ORDER BY created DESC LIMIT 1";
         try (Connection connection = getConnection()) {
             return runner.query(connection, getId, new ScalarHandler<>());
         }
@@ -301,7 +294,7 @@ public class DataGenerator {
         val order = "DELETE FROM order_entity";
         val payment = "DELETE FROM payment_entity";
         val creditRequest = "DELETE FROM credit_request_entity";
-        try (val connection = getConnection()) {
+        try (Connection connection = getConnection()) {
             runner.update(connection, order);
             runner.update(connection, payment);
             runner.update(connection, creditRequest);

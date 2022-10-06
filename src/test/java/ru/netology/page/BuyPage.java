@@ -3,12 +3,9 @@ package ru.netology.page;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import org.openqa.selenium.By;
-import org.yaml.snakeyaml.events.CollectionStartEvent;
 import ru.netology.data.DataGenerator;
 
 import java.time.Duration;
-import java.util.Collections;
 
 import static com.codeborne.selenide.Selenide.*;
 
@@ -100,7 +97,7 @@ public class BuyPage {
     }
 
     public void wrongFormatFieldCvc() {
-       cvcError.shouldHave(Condition.exactText("Неверный формат"));
+        cvcError.shouldHave(Condition.exactText("Неверный формат"));
     }
 
     public void fillFormBuy(DataGenerator.OwnerInfo ownerInfo) {
