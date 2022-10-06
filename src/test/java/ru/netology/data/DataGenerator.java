@@ -120,7 +120,8 @@ public class DataGenerator {
 
     public static OwnerInfo getExpiredMonth() {
         var month = LocalDate.now().minusMonths(1).format(DateTimeFormatter.ofPattern("MM"));
-        return new OwnerInfo(generateCardNumber(), month, generateYear(), generateOwner(), generateCvc());
+        var year = LocalDate.now().format(DateTimeFormatter.ofPattern("yy"));
+        return new OwnerInfo(generateCardNumber(), month, year, generateOwner(), generateCvc());
     }
 
     public static OwnerInfo getEarlyYear() {

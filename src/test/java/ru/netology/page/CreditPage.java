@@ -71,10 +71,6 @@ public class CreditPage {
         monthError.shouldHave(Condition.exactText("Неверно указан срок действия карты"));
     }
 
-    public void cardExpiredFieldMonth() {
-        monthError.shouldHave(Condition.exactText("Истек срок действия карты"));
-    }
-
     public void emptyFieldYear() {
         yearError.shouldHave(Condition.exactText("Поле обязательно для заполнения"));
     }

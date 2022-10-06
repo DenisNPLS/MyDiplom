@@ -145,7 +145,7 @@ public class ServiceTestBuyPage {
         tourPage.toBuy();
         buyPage.fillFormBuy(DataGenerator.getExpiredMonth());
         buyPage.sendForm();
-        buyPage.cardExpiredFieldMonth();
+        buyPage.wrongPeriodMonthField();
     }
 
     @Test

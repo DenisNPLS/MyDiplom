@@ -145,7 +145,7 @@ public class ServiceTestCreditPage {
         tourPage.toCredit();
         creditPage.fillFormCredit(DataGenerator.getExpiredMonth());
         creditPage.sendForm();
-        creditPage.cardExpiredFieldMonth();
+        creditPage.wrongPeriodMonthField();
     }
 
     @Test

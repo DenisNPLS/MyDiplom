@@ -64,10 +64,6 @@ public class BuyPage {
         monthError.shouldHave(Condition.exactText("Неверно указан срок действия карты"));
     }
 
-    public void cardExpiredFieldMonth() {
-        monthError.shouldHave(Condition.exactText("Истек срок действия карты"));
-    }
-
     public void emptyFieldYear() {
         yearError.shouldHave(Condition.exactText("Поле обязательно для заполнения"));
     }
@@ -81,7 +77,7 @@ public class BuyPage {
     }
 
     public void cardExpiredFieldYear() {
-        yearError.shouldHave(Condition.exactText("Истек срок действия карты"));
+        yearError.shouldHave(Condition.exactText("Истёк срок действия карты"));
     }
 
     public void emptyFieldOwner() {
