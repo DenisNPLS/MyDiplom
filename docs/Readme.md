@@ -5,7 +5,7 @@
   1. Устанавливаем и запускаем Docker;
   2. Запускаем среду разработки Intellij IDEA;
   3. В терминале прописываем команду docker-compose up -d;
-  4. В зависимости от того, какую базу данных мы будем использовать, прописываем команду: "**java -jar .\artifacts\aqa-shop.jar --spring.datasource.url=jdbc:mysql://localhost:3306/app**" для запуска БД "**MySQL**" или "**java -jar .\artifacts\aqa-shop.jar --spring.datasource.url=jdbc:postgresql://localhost:5432/app**" для запуска БД "**PostgreSQL**";
+  4. В зависимости от того, какую базу данных мы будем использовать, прописываем команду: "**java -jar .\artifacts\aqa-shop.jar --spring.datasource.url=jdbc:mysql://localhost:3306/app**" для запуска БД **MySQL** или "**java -jar .\artifacts\aqa-shop.jar --spring.datasource.url=jdbc:postgresql://localhost:5432/app**" для запуска БД **PostgreSQL**;
 
 Для запуска тестов используем команду: **./gradlew clean test**.
 
